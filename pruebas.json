@@ -1,0 +1,90 @@
+[
+  {
+    "nombre": "Realizar una rutina de entrenamiento físico intenso durante 1 hora",
+    "clase": "Guerrero",
+    "puntos": {
+      "Guerrero": 15,
+      "Mago": 5,
+      "Cazador": 5,
+      "Diplomático": 5,
+      "Artesano": 5
+    }
+  },
+  {
+    "nombre": "Participar en una competencia deportiva o evento de combate",
+    "clase": "Guerrero",
+    "puntos": {
+      "Guerrero": 25,
+      "Mago": 10,
+      "Cazador": 10,
+      "Diplomático": 10,
+      "Artesano": 10
+    }
+  },
+  {
+    "nombre": "Estudiar un libro de hechizos durante 2 horas",
+    "clase": "Mago",
+    "puntos": {
+      "Guerrero": 5,
+      "Mago": 20,
+      "Cazador": 5,
+      "Diplomático": 5,
+      "Artesano": 5
+    }
+  },
+  {
+    "nombre": "Resolver un acertijo mágico o enigma",
+    "clase": "Mago",
+    "puntos": {
+      "Guerrero": 10,
+      "Mago": 30,
+      "Cazador": 10,
+      "Diplomático": 10,
+      "Artesano": 10
+    }
+  },
+  {
+    "nombre": "Ir de excursión y explorar un área natural desconocida",
+    "clase": "Cazador",
+    "puntos": {
+      "Guerrero": 5,
+      "Mago": 5,
+      "Cazador": 20,
+      "Diplomático": 5,
+      "Artesano": 5
+    }
+  },
+  {
+    "nombre": "Construir una trampa para capturar animales de manera ética",
+    "clase": "Cazador",
+    "puntos": {
+      "Guerrero": 10,
+      "Mago": 10,
+      "Cazador": 25,
+      "Diplomático": 10,
+      "Artesano": 10
+    }
+  },
+  {
+    "nombre": "Resolver un conflicto interpersonal o mediación entre amigos",
+    "clase": "Diplomático",
+    "puntos": {
+      "Guerrero": 5,
+      "Mago": 5,
+      "Cazador": 5,
+      "Diplomático": 15,
+      "Artesano": 5
+    }
+  },
+  {
+    "nombre": "Negociar un acuerdo comercial o resolver una disputa diplomática",
+    "clase": "Diplomático",
+    "puntos": {
+      "Guerrero": 10,
+      "Mago": 10,
+      "Cazador": 10,
+      "Diplomático": 25,
+      "Artesano": 10
+    }
+  }
+]
