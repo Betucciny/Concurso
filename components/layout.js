@@ -1,13 +1,13 @@
 import {Navbar, Link, Container, Button, Text} from "@nextui-org/react";
 
 
-function Header() {
+function Top() {
     const pages = [
-        {name: 'Gremio', href: '/', id: 0},
-        {name: 'Tablón de Desafios ', href: '/desafios', id: 1},
-        {name: 'Agenda de Expediciones', href: '/expediciones', id: 2},
-        {name: 'Ranking', href: '/rainking', id: 3},
-        {name: 'Boveda', href: '/boveda', id: 4},
+        {name: 'Gremio', href: '/'},
+        {name: 'Tablón de Desafios ', href: '/desafios'},
+        {name: 'Agenda de Expediciones', href: '/expediciones'},
+        {name: 'Ranking', href: '/rainking'},
+        {name: 'Boveda', href: '/boveda'},
     ]
 
     return (
@@ -89,7 +89,7 @@ const Footer = () => {
 export default function MainLayout({children}) {
     return (
         <>
-            <Header/>
+            <Top/>
             <Container as="main">
                 {children}
             </Container>

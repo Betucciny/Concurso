@@ -1,8 +1,6 @@
 import { Text, Spacer } from "@nextui-org/react"
-import {Inter} from 'next/font/google'
 import MainLayout from "../../components/layout";
 
-const inter = Inter({subsets: ['latin']})
 
 export default function Home() {
     return (
