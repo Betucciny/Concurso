@@ -1,5 +1,5 @@
 import { Text, Spacer } from "@nextui-org/react"
-import MainLayout from "../../components/layout";
+import MainLayout from "@/components/layout";
 
 
 export default function Home() {

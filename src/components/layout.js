@@ -3,11 +3,9 @@ import {Navbar, Link, Container, Button, Text} from "@nextui-org/react";
 
 function Top() {
     const pages = [
-        {name: 'Gremio', href: '/'},
-        {name: 'Tablón de Desafios ', href: '/desafios'},
-        {name: 'Agenda de Expediciones', href: '/expediciones'},
-        {name: 'Ranking', href: '/rainking'},
-        {name: 'Boveda', href: '/boveda'},
+        {name: 'Inicio', href: '/'},
+        {name: 'Calendario', href: '/calendar'},
+
     ]
 
     return (

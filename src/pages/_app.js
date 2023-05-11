@@ -14,6 +14,7 @@ const lightTheme  = createTheme({
             success: '#de994a',
             warning: '#F9CB80',
             gradient: 'linear-gradient(90deg, #4a5ede 0%, #F9CB80 100%)',
+            background: 'rgba(255,255,255,0.71)',
         },
         font: {
             family: 'Roboto, sans-serif',
@@ -25,12 +26,13 @@ const darkTheme   = createTheme({
     type: "dark",
     theme: {
         colors: {
-            primary: '#4a5ede',
+            primary: '#de4ad7',
             secondary: '#F9CB80',
             error: '#FCC5D8',
             success: '#de994a',
             warning: '#F9CB80',
             gradient: 'linear-gradient(90deg, #4a5ede 0%, #F9CB80 100%)',
+            background: '#282828'
         },
         font: {
             family: 'Roboto, sans-serif',
@@ -62,6 +64,7 @@ const Main = ({Component, pageprops}) => {
     }, []);
 
     return (
+
         <NextUIProvider theme={isDark ? darkTheme : lightTheme}>
             <Component {...pageprops}/>
         </NextUIProvider>
