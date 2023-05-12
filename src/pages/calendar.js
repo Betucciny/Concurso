@@ -1,14 +1,15 @@
 import React from 'react'
-import FullCalendar from '@fullcalendar/react' // must go before plugins
-import {Button, Container, Text, useTheme, Dropdown} from "@nextui-org/react";
-import MainLayout from "@/components/layout"; // a plugin!
+import FullCalendar from '@fullcalendar/react'
+import {Container, Text, useTheme, Dropdown} from "@nextui-org/react";
+import MainLayout from "@/components/layout";
 import timeGridPlugin from '@fullcalendar/timegrid'
+import { SSRProvider } from '@restart/ui/ssr'
 
 
-
-export default function () {
+export default function Calendar () {
     const {theme} = useTheme();
     return (
+        <SSRProvider>
         <MainLayout>
             <Container display={"flex"} direction={"row"} justify={"space-between"} alignItems={"center"}>
                 <Text h1 style={
@@ -22,6 +23,7 @@ export default function () {
                     <Dropdown.Button
                         auto
                         id={'dropdown'}
+                        color={'primary'}
                         >
                         Opciones
                     </Dropdown.Button>
@@ -42,6 +44,7 @@ export default function () {
                 }}
                 allDaySlot={false}
                 height={'75vh'}
+                titleFormat={{year: 'numeric', month: 'long', day: 'numeric'}}
                 eventSources={
                     [
                         {
@@ -64,6 +67,6 @@ export default function () {
             />
 
         </MainLayout>
-
+        </SSRProvider>
     )
 }
