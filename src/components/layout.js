@@ -1,5 +1,6 @@
-import {Navbar, Link, Container, Button, Text, Spacer} from "@nextui-org/react";
+import {Navbar, Link, Container, Button, Text, Spacer, Dropdown, Avatar} from "@nextui-org/react";
 import {BiCube} from "react-icons/bi";
+import {RxAvatar} from "react-icons/rx";
 
 
 function Top() {
@@ -10,10 +11,12 @@ function Top() {
         {name: 'Tareas', href: '/tasks'},
         {name: 'Notas', href: '/notes'},
         {name: 'Contacto', href: '/contact'},
-
-
     ]
     const mainPages = pages.slice(0, 3);
+    const sessionOptions = [
+        {name: 'Iniciar sesión', href: '/login'},
+        {name: 'Registrarse', href: '/register'},
+    ]
     return (
         <SSRProvider>
             <Navbar isBordered variant="sticky" maxWidth={"fluid"} css={{zIndex: 1000}}>
@@ -25,13 +28,13 @@ function Top() {
                     {mainPages.map((page, index) => (
                         <li key={index}>
                             <Button
-                                onClick={() => {
+                                onPress={() => {
                                     window.location.href = page.href
                                 }}
                                 auto
                                 color={"gradient"}
                                 ghost
-                                style={{minWidth: "10rem", marginRight: 3, marginLeft: 3}}
+                                style={{minWidth: "8rem", marginRight: 3, marginLeft: 3}}
                             >
                                 {page.name}
                             </Button>
@@ -41,7 +44,7 @@ function Top() {
                 </Navbar.Content>
                 <Navbar.Brand>
                     <Link href='/'>
-                        <Text h1>ClassWave &lt;<BiCube/>/&gt; </Text>
+                        <Text size={'2rem'}>ClassWave &lt;<BiCube/>/&gt; </Text>
                     </Link>
                 </Navbar.Brand>
                 <Navbar.Collapse >
@@ -56,6 +59,31 @@ function Top() {
                         </Navbar.CollapseItem>
                     ))}
                 </Navbar.Collapse>
+                <Dropdown>
+                    <Dropdown.Trigger>
+                        <Avatar
+                            icon={<RxAvatar size={40}/>}
+                            size={'xl'}
+                            pointer
+                            squared
+                            bordered
+                            zoomed
+                        />
+                    </Dropdown.Trigger>
+                    <Dropdown.Menu>
+                        {sessionOptions.map((option, index) => (
+                            <Dropdown.Item
+                                key={index}
+                                onClick={() => {
+                                    console.log(option.href)
+                                }
+                                }
+                            >
+                                {option.name}
+                            </Dropdown.Item>
+                        ))}
+                    </Dropdown.Menu>
+                </Dropdown>
             </Navbar>
         </SSRProvider>
     )
