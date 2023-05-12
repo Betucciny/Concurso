@@ -1,6 +1,7 @@
 import {createTheme, NextUIProvider} from "@nextui-org/react"
 import React, {useEffect, useState} from 'react';
 import {getDocumentTheme} from '@nextui-org/react'
+import '../styles/globals.css'
 
 
 
