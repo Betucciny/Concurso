@@ -1,4 +1,4 @@
-import {Navbar, Link, Container, Button, Text} from "@nextui-org/react";
+import {Navbar, Link, Container, Button, Text, Spacer} from "@nextui-org/react";
 
 
 function Top() {
@@ -9,7 +9,7 @@ function Top() {
     ]
 
     return (
-        <Navbar isBordered variant="sticky">
+        <Navbar isBordered variant="sticky" maxWidth={"fluid"}>
             <Navbar.Toggle showIn='sm' title={'toggleNavbar'}/>
             <Navbar.Content
                 hideIn="sm"
@@ -91,6 +91,7 @@ export default function MainLayout({children}) {
             <Container as="main">
                 {children}
             </Container>
+            <Spacer ></Spacer>
             <Footer/>
         </>
     )

@@ -19,13 +19,16 @@ export default function () {
                     }
                 }>Calendar</Text>
                 <Dropdown>
-                    <Dropdown.Button>
-                        Cambios
+                    <Dropdown.Button
+                        auto
+                        id={'dropdown'}
+                        >
+                        Opciones
                     </Dropdown.Button>
                     <Dropdown.Menu>
-                        <Dropdown.Item>Agregar</Dropdown.Item>
-                        <Dropdown.Item>Editar</Dropdown.Item>
-                        <Dropdown.Item>Eliminar</Dropdown.Item>
+                        <Dropdown.Item id={'agregar'}>Agregar</Dropdown.Item>
+                        <Dropdown.Item id={'editar'}>Editar</Dropdown.Item>
+                        <Dropdown.Item id={'eliminar'}>Eliminar</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
             </Container>
@@ -38,7 +41,7 @@ export default function () {
                     right: 'timeGridWeek,timeGridDay'
                 }}
                 allDaySlot={false}
-                height={'80vh'}
+                height={'75vh'}
                 eventSources={
                     [
                         {
