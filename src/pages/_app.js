@@ -2,6 +2,7 @@ import {createTheme, NextUIProvider} from "@nextui-org/react"
 import React, {useEffect, useState} from 'react';
 import {getDocumentTheme} from '@nextui-org/react'
 import '../styles/globals.css'
+import MainLayout from "@/components/layout";
 
 
 
@@ -91,9 +92,10 @@ const Main = ({Component, pageprops}) => {
 
 
     return (
-
         <NextUIProvider theme={isDark ? darkTheme : lightTheme}>
-            <Component {...pageprops}/>
+            <MainLayout>
+                <Component {...pageprops}/>
+            </MainLayout>
         </NextUIProvider>
     )
 }
