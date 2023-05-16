@@ -18,6 +18,8 @@
     "@restart/ui": "^1.6.3",
     "autoprefixer": "10.4.14",
     "bcrypt": "^5.1.0",
+    "dayjs": "^1.11.7",
+    "dotenv": "^16.0.3",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.1",
     "mysql2": "^3.3.0",
