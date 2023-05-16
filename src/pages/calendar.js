@@ -6,26 +6,29 @@ import {SSRProvider} from '@restart/ui/ssr'
 import {ModalAgregar} from "@/components/modal";
 
 
-export default function Calendar() {
+export default function Calendar({events}) {
     const {theme} = useTheme();
 
     const [modal1, setVisible1] = useState(false);
-    const [modal2, setVisible2] = useState(false);
-    const [modal3, setVisible3] = useState(false);
-    const handler1 = () => setVisible1(true);
-    const closeHandler1 = () => {
-        setVisible1(false);
-    };
 
-    const handler2 = () => setVisible2(true);
-    const closeHandler2 = () => {
-        setVisible2(false);
-    };
+    const [eventosC, setEventosC] = useState(events);
 
-    const handler3 = () => setVisible3(true);
-    const closeHandler3 = () => {
-        setVisible3(false);
-    };
+    const [eventosCalendar, setEventosCalendar] = useState([
+        {
+            title: 'All Day Event',
+            start: '2023-05-16T16:00:00',
+            end: '2023-05-16T20:00:00',
+        },
+        {
+            title: 'Long Event',
+            start: '2023-05-16T16:00:00',
+            end: '2023-05-16T18:00:00',
+        },
+    ],);
+
+    const clickOnEvent = (info) => {
+        console.log(info.event.type);
+    }
 
 
     return (
@@ -38,29 +41,10 @@ export default function Calendar() {
                         fontWeight: 'bold',
                     }
                 }>Calendar</Text>
-                <Dropdown>
-                    <Dropdown.Button
-                        auto
-                        id={'dropdown'}
-                        color={'primary'}
-                    >
-                        Opciones
-                    </Dropdown.Button>
-                    <Dropdown.Menu>
-                        <Dropdown.Item id={'agregar'} textValue={'agregar'}>
-                            <Button onPress={handler1} light>Agregar</Button>
-                        </Dropdown.Item>
-                        <Dropdown.Item id={'editar'} textValue={'editar'}>
-                            <Button onPress={handler2} light>Editar</Button>
-                        </Dropdown.Item>
-                        <Dropdown.Item id={'eliminar'} textValue={'eliminar'}>
-                            <Button onPress={handler3} light>Eliminar</Button>
-                        </Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>
+                <Button onPress={()=>setVisible1(true)}>Agregar Evento</Button>
             </Container>
             <ModalAgregar
-                toOpen={modal1} funcClose={closeHandler1}
+                toOpen={modal1} funcClose={()=>{setVisible1(false)}}
             />
 
             <FullCalendar
@@ -77,22 +61,13 @@ export default function Calendar() {
                 eventSources={
                     [
                         {
-                            events: [
-                                {
-                                    title: 'All Day Event',
-                                    start: '2023-05-11:00:00',
-                                    end: '2023-05-11:12:00',
-                                },
-                                {
-                                    title: 'Long Event',
-                                    start: '2023-05-11:00:00',
-                                    end: '2023-05-11:12:00',
-                                },
-                            ],
-
+                            events: eventos,
+                            color: 'red',
+                            textColor: 'black'
                         },
                     ]
                 }
+                eventClick={clickOnEvent}
             />
 
         </SSRProvider>

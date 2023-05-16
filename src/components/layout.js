@@ -12,7 +12,9 @@ function Top() {
         {name: 'Notas', href: '/notes'},
         {name: 'Contacto', href: '/contact'},
     ]
+
     const mainPages = pages.slice(0, 3);
+
     const sessionOptions = [
         {name: 'Iniciar sesión', href: '/login'},
         {name: 'Registrarse', href: '/register'},
