@@ -47,13 +47,13 @@ export default function Calendar() {
                         Opciones
                     </Dropdown.Button>
                     <Dropdown.Menu>
-                        <Dropdown.Item id={'agregar'}>
+                        <Dropdown.Item id={'agregar'} textValue={'agregar'}>
                             <Button onPress={handler1} light>Agregar</Button>
                         </Dropdown.Item>
-                        <Dropdown.Item id={'editar'}>
+                        <Dropdown.Item id={'editar'} textValue={'editar'}>
                             <Button onPress={handler2} light>Editar</Button>
                         </Dropdown.Item>
-                        <Dropdown.Item id={'eliminar'}>
+                        <Dropdown.Item id={'eliminar'} textValue={'eliminar'}>
                             <Button onPress={handler3} light>Eliminar</Button>
                         </Dropdown.Item>
                     </Dropdown.Menu>
