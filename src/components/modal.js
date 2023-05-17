@@ -1,9 +1,9 @@
 import {Dropdown, Modal, Text, Container, Button, Input} from "@nextui-org/react";
-import React from "react";
+import React, {useEffect} from "react";
 import dayjs from "dayjs";
 
 
-function ModalAgregar({toOpen, funcClose, editar, evento, id}) {
+function ModalAgregar({toOpen, funcClose, editar, eventos, id}) {
     const tipos = {
         'Puntual': 0,
         'Recurrente': 1,
@@ -11,15 +11,7 @@ function ModalAgregar({toOpen, funcClose, editar, evento, id}) {
 
     const dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
 
-    const iniciales = !!editar ? {
-        dia: new Set([evento.dia ? evento.dia : "Lunes"]),
-        tipo: new Set([evento.tipo]),
-        nombre: evento.nombre,
-        descripcion: evento.descripcion,
-        hora: evento.hora,
-        fecha: !!evento.fecha ? evento.fecha : dayjs().format('YYYY-MM-DD'),
-        duracion: evento.duracion,
-    } : {
+    const iniciales ={
         dia: new Set([dias[0]]),
         tipo: new Set([Object.keys(tipos)[0]]),
         nombre: '',
@@ -40,6 +32,14 @@ function ModalAgregar({toOpen, funcClose, editar, evento, id}) {
     const [duracion, setDuracion] = React.useState(iniciales.duracion);
 
     const [error, setError] = React.useState(false);
+
+    useEffect(
+        () = > {
+        let eventoSelect =
+            setTipo()
+    }
+
+    [id])
 
     const checkRequired = () => {
         if (tipo.size === 0) {
