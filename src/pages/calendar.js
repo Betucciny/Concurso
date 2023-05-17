@@ -13,17 +13,21 @@ export default function Calendar() {
     const [eventsR, setEventosR] = useState(null);
     const [eventsI, setEventosI] = useState(null);
 
+    const fetchEvents = async () => {
+        const fetchData = async () => {
+            const res = await fetch('/api/eventosI/1')
+            const json = await res.json()
+            setEvents(json.eventos)
+            const [eventsI, eventsR] = formatEventsForFullCalendar(json.eventos)
+            setEventosI(eventsI)
+            setEventosR(eventsR)
+        };
+        await fetchData()
+    }
+
     useEffect(
         () => {
-            const fetchData = async () => {
-                const res = await fetch('/api/eventosI/1')
-                const json = await res.json()
-                setEvents(json.eventos)
-                const [eventsI, eventsR] = formatEventsForFullCalendar(json.eventos)
-                setEventosI(eventsI)
-                setEventosR(eventsR)
-            };
-            fetchData()
+            fetchEvents()
         },[]
     )
 
@@ -56,7 +60,8 @@ export default function Calendar() {
                 >Agregar Evento</Button>
             </Container>
             <ModalAgregar
-                toOpen={modal1} funcClose={()=>{setVisible1(false)}} editar={edit} eventos={events} id={id} setId={setId}
+                toOpen={modal1} funcClose={()=>{setVisible1(false)}} editar={edit}
+                eventos={events} id={id} setId={setId} fetchEvents={fetchEvents} setEditar={setEdit}
             />
 
             <FullCalendar
@@ -75,12 +80,12 @@ export default function Calendar() {
                         {
                             events: eventsI,
                             color: theme.colors.primary.value,
-                            textColor: 'black'
+                            textColor: 'white'
                         },
                         {
                             events: eventsR,
-                            color: 'blue',
-                            textColor: 'black'
+                            color: theme.colors.secondary.value,
+                            textColor: 'white'
                         }
                     ]
                 }

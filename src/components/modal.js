@@ -1,11 +1,11 @@
 import {Dropdown, Modal, Text, Container, Button, Input} from "@nextui-org/react";
 import React, {useEffect} from "react";
-import {getMinutesFromDuration, getYMD} from "@/clientServices/formatEvents";
+import {getMinutesFromDuration, getYMD, minutesToTime} from "@/clientServices/formatEvents";
 
 
 
 
-function ModalAgregar({toOpen, funcClose, editar, eventos, id, setId}) {
+function ModalAgregar({toOpen, funcClose, editar, eventos, id, setId, fetchEvents}) {
     const tipos = {
         'Puntual': 0,
         'Recurrente': 1,
@@ -38,7 +38,7 @@ function ModalAgregar({toOpen, funcClose, editar, eventos, id, setId}) {
                 const evento = eventos.find(element => element.id === Number(id))
                 if(!evento){ return }
                 setTipo(new Set([evento.recurrencia ? 'Recurrente' : 'Puntual']))
-                evento.recurrencia ? setDia(new Set(evento.dia_semana)) : setFecha(getYMD(new Date(evento.fecha)))
+                evento.recurrencia ? setDia(new Set([evento.dia_semana])) : setFecha(getYMD(new Date(evento.fecha)))
                 setNombre(evento.titulo)
                 setDescripcion(evento.decripcion)
                 setHora(evento.hora)
@@ -73,14 +73,91 @@ function ModalAgregar({toOpen, funcClose, editar, eventos, id, setId}) {
 
     }
 
-    const agregar = () => {
+    const agregarEditar = async () => {
         if (checkRequired()) {
             setError(false)
-            // TODO: Agregar evento
-            funcClose()
+            if (editar) {
+                await editarEvento(id)
+            } else {
+                await agregarEvento()
+            }
+            await fetchEvents()
+            newfuncClose()
         }else{
             setError(true)
         }
+    }
+
+    const agregarEvento = async () => {
+        const body = {
+            'tipo': 'individual',
+            'idEspecial': 1,
+            recurrencia: tipo.has('Puntual') ? 0 : 1,
+            titulo: nombre,
+            descripcion: descripcion,
+            hora: hora,
+            duracion: minutesToTime(duracion),
+            fecha: tipo.has('Puntual') ? fecha : [...dia][0],
+        }
+        console.log(JSON.stringify(body))
+        const res = await fetch('/api/eventosI/0', {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers:{
+                'Content-Type': 'application/json',
+                'Content-Length': JSON.stringify(body).length.toString()
+            }})
+        if (!res.ok) {
+            console.log("Error al agregar evento")
+        }
+    }
+
+    const editarEvento = async (id) => {
+        const body = {
+            'id': id,
+            'tipo': 'individual',
+            'idEspecial': 1,
+            'recurrencia': tipo.has('Puntual') ? 0 : 1,
+            'titulo': nombre,
+            'descripcion': descripcion,
+            'hora': hora,
+            'duracion': minutesToTime(duracion),
+            'fecha': tipo.has('Puntual') ? fecha : [...dia][0],
+        }
+        const res = await fetch('/api/eventosI/1', {
+            method: 'PUT',
+            body: JSON.stringify(body),
+            headers:{
+                'Content-Type': 'application/json',
+                'Content-Length': JSON.stringify(body).length.toString()
+            }
+        })
+        if (!res.ok) {
+            console.log("Error al editar evento")
+        }
+    }
+
+    const eliminar = async () => {
+        const res = await fetch('/api/eventosI/' + id, {method: 'DELETE'})
+        if (!res.ok) {
+            console.log("Error al eliminar evento")
+        }
+        await fetchEvents()
+        newfuncClose()
+    }
+
+
+    const newfuncClose = () => {
+        setId(null)
+        setTipo(new Set([Object.keys(tipos)[0]]))
+        setDia(new Set([dias[0]]))
+        setNombre('')
+        setDescripcion('')
+        setHora('')
+        setFecha('')
+        setDuracion(0)
+        setError(false)
+        funcClose()
     }
 
     return (
@@ -90,20 +167,11 @@ function ModalAgregar({toOpen, funcClose, editar, eventos, id, setId}) {
             aria-describedby="modal-description"
             open={toOpen}
             onClose={()=>{
-                setId(null)
-                setTipo(new Set([Object.keys(tipos)[0]]))
-                setDia(new Set([dias[0]]))
-                setNombre('')
-                setDescripcion('')
-                setHora('')
-                setFecha('')
-                setDuracion(0)
-                setError(false)
-                funcClose()
+                newfuncClose()
             }}
         >
             <Modal.Header>
-                <Text h3 id={"modal-title"}>{!!editar ? "Editar evento": "Agregar evento"}</Text>
+                <Text h3 id={"modal-title"}>{!!editar ? "Editar o eliminar evento": "Agregar evento"}</Text>
             </Modal.Header>
             <Modal.Body>
                 <Container display={'flex'} direction={"row"} justify={"space-between"} alignItems={"center"}>
@@ -163,9 +231,10 @@ function ModalAgregar({toOpen, funcClose, editar, eventos, id, setId}) {
                 <Input label={"Duración del evento en minutos"} bordered color={"primary"} type={"number"} required={true} value={duracion}
                         onChange={(event)=>{setDuracion(event.target.value)}}/>
                 <Text color={"error"}>{error ? "Faltan campos por llenar" : ""}</Text>
-                <Button onPress={agregar}>
-                    Agregar
+                <Button onPress={agregarEditar}>
+                    {!!editar ? "Modificar": "Agregar evento"}
                 </Button>
+                {!!editar ? (<Button onPress={eliminar}>Eliminar</Button>): ""}
             </Modal.Body>
         </Modal>
     )

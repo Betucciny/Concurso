@@ -2,18 +2,20 @@ const formatEventsForFullCalendar = (events) => {
     const formattedEventsI = [];
     const formattedEventsR = [];
 
+
     events.forEach((event) => {
+
         if (event.recurrencia === 0) {
+            const fecha =calcularFechaConHora(event.fecha, event.hora)
             // Punctual event
             const formattedEvent = {
                 id: event.id,
                 title: event.titulo,
-                start: new Date(event.fecha),
-                end: calculateEndDate(event.fecha, event.duracion),
+                start: fecha,
+                end: calculateEndDate(fecha, event.duracion),
                 description: event.descripcion,
                 // Other custom fields you need
             };
-
             formattedEventsI.push(formattedEvent);
         } else if (event.recurrencia === 1) {
             // Recurrent event
@@ -25,7 +27,6 @@ const formatEventsForFullCalendar = (events) => {
                 recurringStartDates.forEach((startDate) => {
                     startDate.setHours(event.hora.split(':')[0]);
                     startDate.setMinutes(event.hora.split(':')[1]);
-                    startDate.setSeconds(event.hora.split(':')[2]);
 
                     const endDate = calculateEndDate(startDate, event.duracion);
 
@@ -55,7 +56,6 @@ const calculateEndDate = (startDate, duration) => {
     endDate.setHours(endDate.getHours() + parseInt(durationParts[0]));
     endDate.setMinutes(endDate.getMinutes() + parseInt(durationParts[1]));
     endDate.setSeconds(endDate.getSeconds() + parseInt(durationParts[2]));
-
     return endDate;
 };
 
@@ -92,7 +92,7 @@ const getWeekStartDate = (referenceDate, weekOffset) => {
 
 // Helper function to get the recurrence days based on the provided weekday
 const getRecurrenceDays = (weekday) => {
-    const days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
+    const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     const weekdayIndex = days.findIndex((day) => day.toLowerCase() === weekday.toLowerCase());
 
     return [weekdayIndex];
@@ -115,5 +115,24 @@ const getYMD = (date) => {
     return `${year}-${paddedString}-${day}`;
 }
 
+function calcularFechaConHora(fechaString, horaString) {
+    const fecha = new Date(fechaString);
+    const [hora, minutos] = horaString.split(':');
 
-export {formatEventsForFullCalendar, getMinutesFromDuration, getYMD};
+    fecha.setUTCHours(hora);
+    fecha.setUTCMinutes(minutos);
+
+    return fecha;
+}
+
+const minutesToTime = (minutes) => {
+    const nminutes = Number(minutes);
+    const h = Math.floor(nminutes / 60);
+    const m = nminutes % 60;
+    const paddedString = m.toString().padStart(2, '0')
+    const paddedString2 = h.toString().padStart(2, '0')
+    return `${paddedString2}:${paddedString}`;
+}
+
+
+export {formatEventsForFullCalendar, getMinutesFromDuration, getYMD, minutesToTime};
