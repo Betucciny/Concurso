@@ -1,38 +1,46 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import FullCalendar from '@fullcalendar/react'
-import {Container, Text, useTheme, Dropdown, Button} from "@nextui-org/react";
+import {Container, Text, useTheme, Button} from "@nextui-org/react";
 import timeGridPlugin from '@fullcalendar/timegrid'
-import {SSRProvider} from '@restart/ui/ssr'
+import {formatEventsForFullCalendar} from "@/clientServices/formatEvents";
 import {ModalAgregar} from "@/components/modal";
 
 
-export default function Calendar({events}) {
+
+export default function Calendar() {
+
+    const [events, setEvents] = useState(null)
+    const [eventsR, setEventosR] = useState(null);
+    const [eventsI, setEventosI] = useState(null);
+
+    useEffect(
+        () => {
+            const fetchData = async () => {
+                const res = await fetch('/api/eventosI/1')
+                const json = await res.json()
+                setEvents(json.eventos)
+                const [eventsI, eventsR] = formatEventsForFullCalendar(json.eventos)
+                setEventosI(eventsI)
+                setEventosR(eventsR)
+            };
+            fetchData()
+        },[]
+    )
+
     const {theme} = useTheme();
-
     const [modal1, setVisible1] = useState(false);
+    const [id, setId] = useState(null);
 
-    const [eventosC, setEventosC] = useState(events);
-
-    const [eventosCalendar, setEventosCalendar] = useState([
-        {
-            title: 'All Day Event',
-            start: '2023-05-16T16:00:00',
-            end: '2023-05-16T20:00:00',
-        },
-        {
-            title: 'Long Event',
-            start: '2023-05-16T16:00:00',
-            end: '2023-05-16T18:00:00',
-        },
-    ],);
-
+    const [edit, setEdit] = useState(false);
     const clickOnEvent = (info) => {
-        console.log(info.event.type);
+        setId(info.event.id)
+        setEdit(true)
+        setVisible1(true)
     }
 
 
     return (
-        <SSRProvider>
+        <>
             <Container display={"flex"} direction={"row"} justify={"space-between"} alignItems={"center"}>
                 <Text h1 style={
                     {
@@ -41,10 +49,14 @@ export default function Calendar({events}) {
                         fontWeight: 'bold',
                     }
                 }>Calendar</Text>
-                <Button onPress={()=>setVisible1(true)}>Agregar Evento</Button>
+                <Button onPress={()=> {
+                    setVisible1(true)
+                    setEdit(false)
+                }}
+                >Agregar Evento</Button>
             </Container>
             <ModalAgregar
-                toOpen={modal1} funcClose={()=>{setVisible1(false)}}
+                toOpen={modal1} funcClose={()=>{setVisible1(false)}} editar={edit} eventos={events} id={id} setId={setId}
             />
 
             <FullCalendar
@@ -61,15 +73,22 @@ export default function Calendar({events}) {
                 eventSources={
                     [
                         {
-                            events: eventos,
-                            color: 'red',
+                            events: eventsI,
+                            color: theme.colors.primary.value,
                             textColor: 'black'
                         },
+                        {
+                            events: eventsR,
+                            color: 'blue',
+                            textColor: 'black'
+                        }
                     ]
                 }
                 eventClick={clickOnEvent}
             />
 
-        </SSRProvider>
+        </>
     )
 }
+
+

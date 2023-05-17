@@ -1,9 +1,11 @@
 import {Dropdown, Modal, Text, Container, Button, Input} from "@nextui-org/react";
-import React from "react";
-import dayjs from "dayjs";
+import React, {useEffect} from "react";
+import {getMinutesFromDuration, getYMD} from "@/clientServices/formatEvents";
 
 
-function ModalAgregar({toOpen, funcClose, editar, evento, id}) {
+
+
+function ModalAgregar({toOpen, funcClose, editar, eventos, id, setId}) {
     const tipos = {
         'Puntual': 0,
         'Recurrente': 1,
@@ -11,25 +13,15 @@ function ModalAgregar({toOpen, funcClose, editar, evento, id}) {
 
     const dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
 
-    const iniciales = !!editar ? {
-        dia: new Set([evento.dia ? evento.dia : "Lunes"]),
-        tipo: new Set([evento.tipo]),
-        nombre: evento.nombre,
-        descripcion: evento.descripcion,
-        hora: evento.hora,
-        fecha: !!evento.fecha ? evento.fecha : dayjs().format('YYYY-MM-DD'),
-        duracion: evento.duracion,
-    } : {
+    const iniciales = {
         dia: new Set([dias[0]]),
         tipo: new Set([Object.keys(tipos)[0]]),
         nombre: '',
         descripcion: '',
         hora: '',
-        fecha: dayjs().format('YYYY-MM-DD'),
+        fecha: '',
         duracion: 0,
     }
-
-
 
     const [tipo, setTipo] = React.useState(iniciales.tipo);
     const [dia, setDia] = React.useState(iniciales.dia);
@@ -38,8 +30,25 @@ function ModalAgregar({toOpen, funcClose, editar, evento, id}) {
     const [hora, setHora] = React.useState(iniciales.hora);
     const [fecha, setFecha] = React.useState(iniciales.fecha);
     const [duracion, setDuracion] = React.useState(iniciales.duracion);
-
     const [error, setError] = React.useState(false);
+
+    useEffect(
+        () => {
+            if (editar) {
+                const evento = eventos.find(element => element.id === Number(id))
+                if(!evento){ return }
+                setTipo(new Set([evento.recurrencia ? 'Recurrente' : 'Puntual']))
+                evento.recurrencia ? setDia(new Set(evento.dia_semana)) : setFecha(getYMD(new Date(evento.fecha)))
+                setNombre(evento.titulo)
+                setDescripcion(evento.decripcion)
+                setHora(evento.hora)
+                setDuracion(getMinutesFromDuration(evento.duracion))
+            }else {
+                setId(null)
+            }
+        },
+        [editar, id]
+    )
 
     const checkRequired = () => {
         if (tipo.size === 0) {
@@ -54,20 +63,17 @@ function ModalAgregar({toOpen, funcClose, editar, evento, id}) {
         if (hora === '') {
             return false
         }
-        if (tipo.has('Puntual') && fecha === dayjs().format('YYYY-MM-DD')) {
+        if (tipo.has('Puntual') && fecha === '') {
             return false
         }
         if (tipo.has('Recurrente') && dia.size === 0) {
             return false
         }
-        if (duracion === 0) {
-            return false
-        }
-        return true
+        return duracion !== 0;
+
     }
 
     const agregar = () => {
-        // console.log([...tipo.keys()][0], [...dia][0], nombre, descripcion, hora, fecha, duracion)
         if (checkRequired()) {
             setError(false)
             // TODO: Agregar evento
@@ -84,12 +90,13 @@ function ModalAgregar({toOpen, funcClose, editar, evento, id}) {
             aria-describedby="modal-description"
             open={toOpen}
             onClose={()=>{
+                setId(null)
                 setTipo(new Set([Object.keys(tipos)[0]]))
                 setDia(new Set([dias[0]]))
                 setNombre('')
                 setDescripcion('')
                 setHora('')
-                setFecha(dayjs().format('YYYY-MM-DD'))
+                setFecha('')
                 setDuracion(0)
                 setError(false)
                 funcClose()
@@ -125,14 +132,14 @@ function ModalAgregar({toOpen, funcClose, editar, evento, id}) {
                         </Dropdown.Menu>
                     </Dropdown>
                 </Container>
-                <Input label={"Nombre del evento"} bordered color={"primary"} required={true}
+                <Input label={"Nombre del evento"} bordered color={"primary"} required={true} value={nombre}
                        onChange={(event)=>{setNombre(event.target.value)}}/>
-                <Input label={"Descripción del evento"} bordered color={"primary"} required={true}
+                <Input label={"Descripción del evento"} bordered color={"primary"} required={true} value={descripcion}
                         onChange={(event)=>{setDescripcion(event.target.value)}}/>
-                <Input label={"Hora del evento"} bordered color={"primary"} type={"time"} required={true}
+                <Input label={"Hora del evento"} bordered color={"primary"} type={"time"} required={true} value={hora}
                         onChange={(event)=>{setHora(event.target.value)}}/>
                 {!!tipo.has('Puntual') ? (
-                        <Input label={"Fecha del evento"} bordered color={"primary"} type={"date"} required={!!tipo.has('Puntual')}
+                        <Input label={"Fecha del evento"} bordered color={"primary"} type={"date"} required={!!tipo.has('Puntual')} value={fecha}
                         onChange={(event)=>{setFecha(event.target.value)}}/>) :
                     (<Dropdown>
                         <Dropdown.Button flat color={'primary'}>
@@ -153,7 +160,7 @@ function ModalAgregar({toOpen, funcClose, editar, evento, id}) {
                         </Dropdown.Menu>
 
                     </Dropdown>)}
-                <Input label={"Duración del evento en minutos"} bordered color={"primary"} type={"number"} required={true}
+                <Input label={"Duración del evento en minutos"} bordered color={"primary"} type={"number"} required={true} value={duracion}
                         onChange={(event)=>{setDuracion(event.target.value)}}/>
                 <Text color={"error"}>{error ? "Faltan campos por llenar" : ""}</Text>
                 <Button onPress={agregar}>
