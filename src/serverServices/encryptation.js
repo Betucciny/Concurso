@@ -1,3 +1,5 @@
+
+
 const bcrypt = require('bcrypt');
 
 async function comparePassword(password, hash) {
