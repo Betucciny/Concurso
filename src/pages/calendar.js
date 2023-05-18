@@ -17,6 +17,7 @@ export default function Calendar() {
         const fetchData = async () => {
             const res = await fetch('/api/eventosI/1')
             const json = await res.json()
+            console.log(json.eventos)
             setEvents(json.eventos)
             const [eventsI, eventsR] = formatEventsForFullCalendar(json.eventos)
             setEventosI(eventsI)
@@ -62,7 +63,7 @@ export default function Calendar() {
             <ModalAgregar
                 toOpen={modal1} funcClose={()=>{setVisible1(false)}} editar={edit}
                 eventos={events} id={id} setId={setId} fetchEvents={fetchEvents} setEditar={setEdit}
-                isSuscripcion={false}
+                idSuscripcion={null}
             />
 
             <FullCalendar

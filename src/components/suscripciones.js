@@ -1,4 +1,5 @@
 import {Button, Card, Container, Spacer, Text} from "@nextui-org/react";
+import {getYMD, getMinutesFromDuration} from "@/clientServices/formatEvents";
 
 
 function Suscripcion({children}) {
@@ -7,29 +8,39 @@ function Suscripcion({children}) {
             <Container display={"flex"} direction={"row"} alignItems={"center"} justify={"center"}>
                 {children}
             </Container>
-            <Spacer y={1}/>
-            <Button>Agregar suscripcion</Button>
         </>
     )
 }
 
-function SuscripcionItems({eventos, idSuscripcion}) {
+function SuscripcionItems({eventos, idSuscripcion, title, clickonEvent, clikOnAgregar}) {
     return (
-        <Container style={{marginTop: "1rem"}}>
-            <Text h3>Clase</Text>
+        <Container style={{marginTop: "1rem"}} data-id={idSuscripcion}>
+            <Text h3>{title}</Text>
             <Container display={"flex"} wrap={'wrap'} style={{maxHeight: '20rem', overflowY: 'scroll', margin: '1rem'}}>
                 {eventos.map((evento, index) => (
-                        <Card key={index} css={{mw: "200px", margin: "1rem", padding:'1rem'}}>
-                            <Text>{evento.titulo}</Text>
-                            <Text>{evento.descripcion}</Text>
-                            <Text>{evento.hora}</Text>
-                            {!!evento.recurrencia ? <Text>{evento.dia}</Text> : <Text>{evento.fecha}</Text>}
-                            <Text>{evento.duracion}</Text>
+                        <Card key={index} css={{mw: "340px", margin: "1rem", padding: '1rem'}}>
+                            <Card.Header>
+                                <Text>{'Título: ' + evento.titulo}</Text>
+                            </Card.Header>
+                            <Card.Divider/>
+                            <Text>{!!evento.recurrencia ? 'Recurrente' : 'Puntual'}</Text>
+                            <Card.Body>
+                                <Text>{'Descripcion: ' + evento.decripcion}</Text>
+                                <Text>{'Hora: ' + evento.hora}</Text>
+                                {!!evento.recurrencia ? <Text>{'Dia: ' + evento.dia_semana}</Text> :
+                                    <Text>{'Fecha: ' + getYMD(new Date(evento.fecha))}</Text>}
+                                <Text>{'Duracion: ' + getMinutesFromDuration(evento.duracion) + ' minutos'}</Text>
+                                <Button size="sm" style={{maxWidth: '2rem'}} color={'secondary'}
+                                        onPress={() => clickonEvent(evento.id)}>Editar</Button>
+                            </Card.Body>
                         </Card>
                     )
                 )}
             </Container>
-            <Button>Agregar Evento</Button>
+            <Container display={"flex"} direction={"row"} alignItems={"center"} justify={"space-around"}>
+                <Button onPress={clikOnAgregar} >Agregar Evento</Button>
+                <Button color={'warning'}>Eliminar Suscripcion</Button>
+            </Container>
         </Container>
 
     )

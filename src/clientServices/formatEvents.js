@@ -2,7 +2,6 @@ const formatEventsForFullCalendar = (events) => {
     const formattedEventsI = [];
     const formattedEventsR = [];
 
-
     events.forEach((event) => {
 
         if (event.recurrencia === 0) {

@@ -5,8 +5,8 @@ import {getMinutesFromDuration, getYMD, minutesToTime} from "@/clientServices/fo
 
 
 
-function ModalAgregar({toOpen, funcClose, editar, eventos, id, setId, fetchEvents, isSuscripcion}) {
-    const id_usuario_evento = 1
+function ModalAgregar({toOpen, funcClose, editar, eventos, id, setId, fetchEvents, idSuscripcion}) {
+    const id_usuario_evento = !!idSuscripcion ? idSuscripcion : 1
 
     const tipos = {
         'Puntual': 0,
@@ -92,7 +92,7 @@ function ModalAgregar({toOpen, funcClose, editar, eventos, id, setId, fetchEvent
 
     const agregarEvento = async () => {
         const body = {
-            'tipo': 'individual',
+            'tipo': !!idSuscripcion ? 'suscripcion' : 'individual',
             'idEspecial': id_usuario_evento,
             recurrencia: tipo.has('Puntual') ? 0 : 1,
             titulo: nombre,
@@ -101,7 +101,6 @@ function ModalAgregar({toOpen, funcClose, editar, eventos, id, setId, fetchEvent
             duracion: minutesToTime(duracion),
             fecha: tipo.has('Puntual') ? fecha : [...dia][0],
         }
-        console.log(JSON.stringify(body))
         const res = await fetch('/api/eventosI/0', {
             method: 'POST',
             body: JSON.stringify(body),
@@ -117,8 +116,8 @@ function ModalAgregar({toOpen, funcClose, editar, eventos, id, setId, fetchEvent
     const editarEvento = async (id) => {
         const body = {
             'id': id,
-            'tipo': isSuscripcion ? 'suscripcion' :'individual',
-            'idEspecial': 1,
+            'tipo': idSuscripcion ? 'suscripcion' :'individual',
+            'idEspecial': idSuscripcion ? idSuscripcion : 1,
             'recurrencia': tipo.has('Puntual') ? 0 : 1,
             'titulo': nombre,
             'descripcion': descripcion,

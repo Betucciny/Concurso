@@ -1,61 +1,86 @@
-import {Text, useTheme} from "@nextui-org/react";
+import {Button, Spacer, Text, useTheme} from "@nextui-org/react";
 import {Suscripcion, SuscripcionItems} from "@/components/suscripciones";
-import {useState} from "react";
+import React, {useEffect, useState} from "react";
+import {ModalAgregar} from "@/components/modal";
 
 
 export default function Suscripciones() {
     const {theme} = useTheme();
 
-    // const [suscripciones, setSuscripciones] = useState(null)
-    const suscripciones = [
-        {
-            id: 1,
-            eventos: [
-                {
-                    id: 1,
-                    titulo: 'Clase de prueba',
-                    descripcion: 'Clase de prueba',
-                    hora: '10:00',
-                    fecha: '2021-10-10',
-                    duracion: '1:00',
-                    recurrencia: false,
-                },
-            ]
-        },
-        {
-            id: 2,
-            eventos: [
-                {
-                    id: 2,
-                    titulo: 'Clase de prueba 2',
-                    descripcion: 'Clase de prueba 2',
-                    hora: '10:00',
-                    fecha: '2021-10-10',
-                    duracion: '1:00',
-                    recurrencia: false,
-                },
-                {
-                    id: 3,
-                    titulo: 'Clase de prueba 3',
-                    descripcion: 'Clase de prueba 3',
-                    hora: '10:00',
-                    fecha: '2021-10-10',
-                    duracion: '1:00',
-                    recurrencia: false,
-                },
+    const [suscripciones, setSuscripciones] = useState([])
+    const [id, setId] = useState(null)
+    const [id_suscripcion, setIdSuscripcion] = useState(null)
+    const [edit, setEdit] = useState(false)
+    const [visible1, setVisible1] = useState(false)
+    const [eventos, setEventos] = useState([])
 
-            ]
+
+    const fetchData = async () => {
+        const res = await fetch('/api/suscripciones/3')
+        const json = await res.json()
+        return json.suscripcion
+    };
+
+    const fetchEvents = async () => {
+        const suscripciones = await fetchData()
+        const eventos = suscripciones.flatMap(objeto => objeto.eventos)
+        setEventos(eventos)
+    }
+
+    const fetchSuscripciones = async () => {
+        setSuscripciones(await fetchData())
+    }
+
+    useEffect(
+        () => {
+            fetchSuscripciones()
+            fetchEvents()
         },
-    ]
+        []
+    )
+
+    useEffect(
+        () => {
+            fetchSuscripciones()
+        },
+        [eventos]
+    )
+
+    const clickOnEvent = (id) => {
+        setId(id)
+        setEdit(true)
+        setVisible1(true)
+    }
+
+    const agregarSuscripcion = () => {
+        // TODO agregar suscripcion
+    }
 
     return (
         <>
             <Text h1 color={'primary'}>Clases</Text>
             <Suscripcion>
                 {suscripciones.map((suscripcion, index) => (
-                    <SuscripcionItems key={index} eventos={suscripcion.eventos} idSuscripcion={suscripcion.id}/>
+                    <SuscripcionItems key={index} eventos={suscripcion.eventos} idSuscripcion={suscripcion.id}
+                                      title={suscripcion.nombre} clickonEvent={clickOnEvent}
+                                      clikOnAgregar={() => {
+                                          setIdSuscripcion(suscripcion.id)
+                                          setVisible1(true)
+                                          setEdit(false)
+                                      }}
+                    />
                 ))}
             </Suscripcion>
+            <Spacer y={1}/>
+            <Button color={'success'}>Agregar suscripcion</Button>
+            <ModalAgregar
+                toOpen={visible1} funcClose={() => {
+                setVisible1(false)
+            }} editar={edit}
+                eventos={suscripciones.flatMap(objeto => objeto.eventos)} id={id} setId={setId}
+                fetchEvents={fetchEvents} setEditar={setEdit}
+                idSuscripcion={id_suscripcion}
+            />
         </>
     )
 }

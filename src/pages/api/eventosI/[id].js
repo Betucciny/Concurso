@@ -33,7 +33,6 @@ export default async function handler(req, res) {
     }
     else if(req.method === "PUT"){
         const {id, tipo, idEspecial, recurrencia, titulo, descripcion, hora, duracion, fecha} = req.body;
-        console.log(req.body)
         try {
             await updateEventoIndividual(id, tipo, idEspecial, recurrencia, titulo, descripcion, hora, duracion, fecha);
             res.status(200).json({message: "Success"});
