@@ -1,11 +1,13 @@
-import {Dropdown, Modal, Text, Container, Button, Input} from "@nextui-org/react";
+import {Dropdown, Modal, Text, Container, Button, Input, Popover} from "@nextui-org/react";
 import React, {useEffect} from "react";
 import {getMinutesFromDuration, getYMD, minutesToTime} from "@/clientServices/formatEvents";
 
 
 
 
-function ModalAgregar({toOpen, funcClose, editar, eventos, id, setId, fetchEvents}) {
+function ModalAgregar({toOpen, funcClose, editar, eventos, id, setId, fetchEvents, isSuscripcion}) {
+    const id_usuario_evento = 1
+
     const tipos = {
         'Puntual': 0,
         'Recurrente': 1,
@@ -91,7 +93,7 @@ function ModalAgregar({toOpen, funcClose, editar, eventos, id, setId, fetchEvent
     const agregarEvento = async () => {
         const body = {
             'tipo': 'individual',
-            'idEspecial': 1,
+            'idEspecial': id_usuario_evento,
             recurrencia: tipo.has('Puntual') ? 0 : 1,
             titulo: nombre,
             descripcion: descripcion,
@@ -115,7 +117,7 @@ function ModalAgregar({toOpen, funcClose, editar, eventos, id, setId, fetchEvent
     const editarEvento = async (id) => {
         const body = {
             'id': id,
-            'tipo': 'individual',
+            'tipo': isSuscripcion ? 'suscripcion' :'individual',
             'idEspecial': 1,
             'recurrencia': tipo.has('Puntual') ? 0 : 1,
             'titulo': nombre,
@@ -234,7 +236,18 @@ function ModalAgregar({toOpen, funcClose, editar, eventos, id, setId, fetchEvent
                 <Button onPress={agregarEditar}>
                     {!!editar ? "Modificar": "Agregar evento"}
                 </Button>
-                {!!editar ? (<Button onPress={eliminar}>Eliminar</Button>): ""}
+                {!!editar ? (<Popover>
+                    <Popover.Trigger>
+                        <Button color={"error"}>Eliminar evento</Button>
+                    </Popover.Trigger>
+                    <Popover.Content>
+                        <Container display={'flex'} direction={"column"} justify={"space-between"}
+                                   alignItems={"center"} style={{padding: '1rem'}}>
+                            <Text>¿Estás seguro que deseas eliminar el evento?</Text>
+                            <Button color={"error"} onPress={eliminar}>Eliminar</Button>
+                        </Container>
+                    </Popover.Content>
+                </Popover>): ""}
             </Modal.Body>
         </Modal>
     )

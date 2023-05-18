@@ -18,11 +18,11 @@ const lightTheme = createTheme({
             // secondary: podria cambiar
             secondary: '#F9CB80',
             // error: podria cambiar
-            error: '#FCC5D8',
+            error: '#de175e',
             // success: podria cambiar
-            success: '#de994a',
+            success: '#47da37',
             // warning: podria cambiar
-            warning: '#F9CB80',
+            warning: '#f8ae33',
             // gradient: Perfecto
             gradient: 'linear-gradient(90deg, #4a5ede 0%, #F9CB80 100%)',
             // background: Perfecto

@@ -62,6 +62,7 @@ export default function Calendar() {
             <ModalAgregar
                 toOpen={modal1} funcClose={()=>{setVisible1(false)}} editar={edit}
                 eventos={events} id={id} setId={setId} fetchEvents={fetchEvents} setEditar={setEdit}
+                isSuscripcion={false}
             />
 
             <FullCalendar

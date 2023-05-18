@@ -6,7 +6,7 @@ const formatEventsForFullCalendar = (events) => {
     events.forEach((event) => {
 
         if (event.recurrencia === 0) {
-            const fecha =calcularFechaConHora(event.fecha, event.hora)
+            const fecha = calcularFechaConHora(event.fecha, event.hora)
             // Punctual event
             const formattedEvent = {
                 id: event.id,
@@ -119,8 +119,8 @@ function calcularFechaConHora(fechaString, horaString) {
     const fecha = new Date(fechaString);
     const [hora, minutos] = horaString.split(':');
 
-    fecha.setUTCHours(hora);
-    fecha.setUTCMinutes(minutos);
+    fecha.setHours(hora);
+    fecha.setMinutes(minutos);
 
     return fecha;
 }

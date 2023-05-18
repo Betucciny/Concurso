@@ -5,8 +5,8 @@ async function getEventosInd(idUsuario){
     const currentDate = new Date();
     const oneWeekBefore = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 7);
     const oneWeekAfter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 7);
-    const query =  `Select * from evento where id_usuario = `+ escape(idUsuario) + `AND fecha BETWEEN ` +
-        escape(oneWeekBefore) +` AND ` + escape(oneWeekAfter) + ` OR fecha is Null;`;
+    const query =  `Select * from evento where id_usuario = `+ escape(idUsuario) + ` AND (fecha BETWEEN ` +
+        escape(oneWeekBefore) +` AND ` + escape(oneWeekAfter) + ` OR fecha is Null);`;
     const [eventos] = await pool.query(query);
     return eventos;
 }

@@ -4,10 +4,11 @@ import {RxAvatar} from "react-icons/rx";
 
 
 function Top() {
+    const tipo = 'profesor';
     const pages = [
         {name: 'Inicio', href: '/'},
         {name: 'Calendario', href: '/calendar'},
-        {name: 'Clases', href: '/classes'},
+        {name: tipo === "estudiante" ? "Clubs" : "Clases", href: '/suscripciones'},
         {name: 'Tareas', href: '/tasks'},
         {name: 'Notas', href: '/notes'},
         {name: 'Contacto', href: '/contact'},
