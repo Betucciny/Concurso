@@ -5,7 +5,7 @@ import {getMinutesFromDuration, getYMD, minutesToTime} from "@/clientServices/fo
 
 
 
-function ModalAgregar({toOpen, funcClose, editar, eventos, id, setId, fetchEvents, idSuscripcion}) {
+function ModalEventos({toOpen, funcClose, editar, eventos, id, setId, fetchEvents, idSuscripcion}) {
     const id_usuario_evento = !!idSuscripcion ? idSuscripcion : 1
 
     const tipos = {
@@ -253,5 +253,9 @@ function ModalAgregar({toOpen, funcClose, editar, eventos, id, setId, fetchEvent
 }
 
 
+function ModalSuscripcion(){
 
-export {ModalAgregar}
+}
+
+
+export {ModalEventos}

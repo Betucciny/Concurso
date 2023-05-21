@@ -1,12 +1,11 @@
-import {Button, Spacer, Text, useTheme} from "@nextui-org/react";
+import {Button, Spacer, Text, useTheme, Container} from "@nextui-org/react";
 import {Suscripcion, SuscripcionItems} from "@/components/suscripciones";
 import React, {useEffect, useState} from "react";
-import {ModalAgregar} from "@/components/modal";
+import {ModalEventos} from "@/components/modal";
 
 
-export default function Suscripciones() {
+export default function Suscripciones({user}) {
     const {theme} = useTheme();
-
     const [suscripciones, setSuscripciones] = useState([])
     const [id, setId] = useState(null)
     const [id_suscripcion, setIdSuscripcion] = useState(null)
@@ -60,6 +59,12 @@ export default function Suscripciones() {
         <>
             <Text h1 color={'primary'}>Clases</Text>
             <Suscripcion>
+                {suscripciones.length === 0 && (
+                    <Container>
+                        <Text>No hay suscripciones</Text>
+                        <Text>Para agregar una suscripcion, presione el boton de abajo</Text>
+                    </Container>
+                )}
                 {suscripciones.map((suscripcion, index) => (
                     <SuscripcionItems key={index} eventos={suscripcion.eventos} idSuscripcion={suscripcion.id}
                                       title={suscripcion.nombre} clickonEvent={clickOnEvent}
@@ -72,8 +77,8 @@ export default function Suscripciones() {
                 ))}
             </Suscripcion>
             <Spacer y={1}/>
-            <Button color={'success'}>Agregar suscripcion</Button>
-            <ModalAgregar
+            <Button color={'success'} onPress={agregarSuscripcion}>Agregar suscripcion</Button>
+            <ModalEventos
                 toOpen={visible1} funcClose={() => {
                 setVisible1(false)
             }} editar={edit}

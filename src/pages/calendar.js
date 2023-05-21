@@ -3,11 +3,11 @@ import FullCalendar from '@fullcalendar/react'
 import {Container, Text, useTheme, Button} from "@nextui-org/react";
 import timeGridPlugin from '@fullcalendar/timegrid'
 import {formatEventsForFullCalendar} from "@/clientServices/formatEvents";
-import {ModalAgregar} from "@/components/modal";
+import {ModalEventos} from "@/components/modal";
 
 
 
-export default function Calendar() {
+export default function Calendar({user}) {
 
     const [events, setEvents] = useState(null)
     const [eventsR, setEventosR] = useState(null);
@@ -60,7 +60,7 @@ export default function Calendar() {
                 }}
                 >Agregar Evento</Button>
             </Container>
-            <ModalAgregar
+            <ModalEventos
                 toOpen={modal1} funcClose={()=>{setVisible1(false)}} editar={edit}
                 eventos={events} id={id} setId={setId} fetchEvents={fetchEvents} setEditar={setEdit}
                 idSuscripcion={null}

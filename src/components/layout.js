@@ -1,9 +1,11 @@
 import {Navbar, Link, Container, Button, Text, Spacer, Dropdown, Avatar} from "@nextui-org/react";
 import {BiCube} from "react-icons/bi";
 import {RxAvatar} from "react-icons/rx";
+import {useEffect, useState} from "react";
+import React from "react";
 
 
-function Top() {
+function Top({user}) {
     const tipo = 'profesor';
     const pages = [
         {name: 'Inicio', href: '/'},
@@ -50,7 +52,7 @@ function Top() {
                         <Text size={'2rem'}>ClassWave &lt;<BiCube/>/&gt; </Text>
                     </Link>
                 </Navbar.Brand>
-                <Navbar.Collapse >
+                <Navbar.Collapse>
                     {pages.map((page, index) => (
                         <Navbar.CollapseItem key={index}>
                             <Link
@@ -74,7 +76,7 @@ function Top() {
                         />
                     </Dropdown.Trigger>
                     <Dropdown.Menu>
-                        {sessionOptions.map((option, index) => (
+                        {!!user ? sessionOptions.map((option, index) => (
                             <Dropdown.Item
                                 key={index}
                                 onClick={() => {
@@ -84,7 +86,10 @@ function Top() {
                             >
                                 {option.name}
                             </Dropdown.Item>
-                        ))}
+                        )):
+                            ""
+                        // user opcions
+                        }
                     </Dropdown.Menu>
                 </Dropdown>
             </Navbar>
@@ -105,38 +110,63 @@ const Footer = () => {
     }
 
     return (
-        <Container
-            as='footer'
-            display='flex'
-            direction='row'
-            alignContent='space-between'
-        >
-            <Text>
-                The current theme is: {type}
-            </Text>
+        <Container>
+            <Container
+                as='footer'
+                display='flex'
+                direction='row'
+                alignContent='space-between'
+            >
+                <Text>
+                    The current theme is: {type}
+                </Text>
 
-            <Switch
-                color={"primary"}
+                <Switch
+                    color={"primary"}
 
-                checked={isDark}
-                onChange={handleChange}
-                label={isDark ? 'Dark' : 'Light'}
-                style={{marginLeft: 'auto'}}
-            />
+                    checked={isDark}
+                    onChange={handleChange}
+                    label={isDark ? 'Dark' : 'Light'}
+                    style={{marginLeft: 'auto'}}
+                />
+
+            </Container>
+            <Text color={'primary'}>© 2021 ClassWave</Text>
         </Container>
+
     )
 }
 
 
+
+
 export default function MainLayout({children}) {
+    const [userSelected, setUserSelected] = useState('alumno');
+
+    const renderChildren = () => {
+        return React.Children.map(children, (child) => {
+            return React.cloneElement(child, {
+                user: userSelected,
+            });
+        });
+    }
     return (
         <>
             <Top/>
             <Container as="main">
-                {children}
+                {renderChildren()}
             </Container>
             <Spacer></Spacer>
             <Footer/>
+            <Container>
+                <Text>Usuario seleccionado= {userSelected}</Text>
+                <Switch onChange={() => {
+                    setUserSelected(userSelected === 'alumno' ? 'profesor' : 'alumno')
+                }}
+                />
+            </Container>
         </>
     )
 }
+
+
