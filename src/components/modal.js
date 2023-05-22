@@ -5,8 +5,8 @@ import {getMinutesFromDuration, getYMD, minutesToTime} from "@/clientServices/fo
 
 
 
-function ModalEventos({toOpen, funcClose, editar, eventos, id, setId, fetchEvents, idSuscripcion}) {
-    const id_usuario_evento = !!idSuscripcion ? idSuscripcion : 1
+function ModalEventos({toOpen, funcClose, editar, eventos, id, setId, fetchEvents, idSuscripcion, idUsuario}) {
+    const id_usuario_evento = !!idSuscripcion ? idSuscripcion : idUsuario
 
     const tipos = {
         'Puntual': 0,
@@ -117,7 +117,7 @@ function ModalEventos({toOpen, funcClose, editar, eventos, id, setId, fetchEvent
         const body = {
             'id': id,
             'tipo': idSuscripcion ? 'suscripcion' :'individual',
-            'idEspecial': idSuscripcion ? idSuscripcion : 1,
+            'idEspecial': id_usuario_evento,
             'recurrencia': tipo.has('Puntual') ? 0 : 1,
             'titulo': nombre,
             'descripcion': descripcion,
@@ -252,10 +252,6 @@ function ModalEventos({toOpen, funcClose, editar, eventos, id, setId, fetchEvent
     )
 }
 
-
-function ModalSuscripcion(){
-
-}
 
 
 export {ModalEventos}

@@ -6,14 +6,11 @@ import React from "react";
 
 
 function Top({user}) {
-    const tipo = 'profesor';
+    const tipo = !user ? null : user.tipo;
     const pages = [
         {name: 'Inicio', href: '/'},
         {name: 'Calendario', href: '/calendar'},
-        {name: tipo === "estudiante" ? "Clubs" : "Clases", href: '/suscripciones'},
-        {name: 'Tareas', href: '/tasks'},
-        {name: 'Notas', href: '/notes'},
-        {name: 'Contacto', href: '/contact'},
+        {name: tipo === "profesor" ? "Clases" : "Clubs", href: '/suscripciones'},
     ]
 
     const mainPages = pages.slice(0, 3);
@@ -22,6 +19,43 @@ function Top({user}) {
         {name: 'Iniciar sesión', href: '/login'},
         {name: 'Registrarse', href: '/register'},
     ]
+
+    const options = () => {
+        return (
+            <Dropdown.Menu style={{minWidth: '10rem'}}>
+                {sessionOptions.map((option, index) => (
+                    <Dropdown.Item
+                        key={index}
+                        onClick={() => {
+                            console.log(option.href)
+                        }
+                        }
+                    >
+                        {option.name}
+                    </Dropdown.Item>
+                ))
+                }
+            </Dropdown.Menu>
+        )
+    }
+
+    const userOptions = () => {
+        return (
+            <Dropdown.Menu style={{minWidth: '10rem'}}>
+                <Dropdown.Item key={'nombre'} css={{height: "$20"}}>
+                    <Text>{'Bienvenido: '}</Text>
+                    <Text color={'primary'}>{user.nombre}</Text>
+                </Dropdown.Item>
+                <Dropdown.Item key={'perfil'} >
+                    <Link href={'/'}>Perfil</Link>
+                </Dropdown.Item>
+                <Dropdown.Item key={'logout'} >
+                    <Link href={'/'}>Cerrar sesión</Link>
+                </Dropdown.Item>
+            </Dropdown.Menu>
+        )
+    }
+
     return (
         <SSRProvider>
             <Navbar isBordered variant="sticky" maxWidth={"fluid"} css={{zIndex: 1000}}>
@@ -75,22 +109,11 @@ function Top({user}) {
                             zoomed
                         />
                     </Dropdown.Trigger>
-                    <Dropdown.Menu>
-                        {!!user ? sessionOptions.map((option, index) => (
-                            <Dropdown.Item
-                                key={index}
-                                onClick={() => {
-                                    console.log(option.href)
-                                }
-                                }
-                            >
-                                {option.name}
-                            </Dropdown.Item>
-                        )):
-                            ""
-                        // user opcions
-                        }
-                    </Dropdown.Menu>
+                        {!user ?
+                            options()
+                         :
+                            userOptions()
+                            }
                 </Dropdown>
             </Navbar>
         </SSRProvider>
@@ -110,7 +133,7 @@ const Footer = () => {
     }
 
     return (
-        <Container>
+        <Container as={'footer'}>
             <Container
                 as='footer'
                 display='flex'
@@ -123,7 +146,6 @@ const Footer = () => {
 
                 <Switch
                     color={"primary"}
-
                     checked={isDark}
                     onChange={handleChange}
                     label={isDark ? 'Dark' : 'Light'}
@@ -141,30 +163,56 @@ const Footer = () => {
 
 
 export default function MainLayout({children}) {
-    const [userSelected, setUserSelected] = useState('alumno');
+    const [userSelected, setUserSelected] = useState(1);
 
     const renderChildren = () => {
         return React.Children.map(children, (child) => {
             return React.cloneElement(child, {
-                user: userSelected,
+                user: userData,
             });
         });
     }
+
+    async function fetchData() {
+        if (userSelected === 1) {
+            const res = await fetch('/api/usuarios/1');
+            const data = await res.json();
+            setUserData(data.usuario);
+        } else {
+            const res = await fetch('/api/usuarios/3');
+            const data = await res.json();
+            setUserData(data.usuario);
+        }
+    }
+
+    const [userData, setUserData] = useState(null);
+
+    useEffect(() => {
+        fetchData();
+    }, [userSelected]);
+
     return (
         <>
-            <Top/>
+            <Top user={userData}/>
             <Container as="main">
                 {renderChildren()}
             </Container>
             <Spacer></Spacer>
             <Footer/>
-            <Container>
-                <Text>Usuario seleccionado= {userSelected}</Text>
-                <Switch onChange={() => {
-                    setUserSelected(userSelected === 'alumno' ? 'profesor' : 'alumno')
+            <Container
+                display='flex'
+                direction='row'
+                alignContent='space-between'
+            >
+                <Text size="$xs" style={{marginRight: '3rem'}}>Usuario seleccionado= {userSelected}</Text>
+                <Switch size="xs" style={{marginRight: '3rem'}} onChange={() => {
+                    setUserSelected(userSelected === 1 ? 3 : 1)
                 }}
                 />
+                <Text size="$xs">Esta solo es una Demo, esta predispuesta a Cambios y las funcionalidades pueden cambiar</Text>
+
             </Container>
+            <Text size="$xs" style={{marginRight: '3rem'}}>Realizado por Roberto Ángel Herrera Rodríguez</Text>
         </>
     )
 }

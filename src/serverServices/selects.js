@@ -11,7 +11,7 @@ async function getEventosInd(idUsuario){
     return eventos;
 }
 
-async function getSuscripciones(idUsuario) {
+async function getSuscripcionesPropias(idUsuario) {
     const query = `Select * from suscripcion where organizador = `+ escape(idUsuario) + `;`;
     const [suscripciones] = await pool.query(query);
     return suscripciones;
@@ -27,6 +27,20 @@ async function getEventosSuscripcion(idSuscripcion){
     return eventos;
 }
 
+async function getUsuarioData(idUsuario){
+    const query = `Select u.id, r.tipo, u.nombre, u.correo, u.contrasena, u.numero from usuario as u join rol as r ` +
+        `on u.rol_id = r.id where u.id = `+ escape(idUsuario) + `;`;
+    const [usuario] = await pool.query(query);
+    return usuario[0];
+}
+
+async function getSucripciones(idUsuario){
+    const query = `select s.id, s.tipo, s.organizador, s.nombre, s.semestre, s.carrera, s.descripcion from suscripcion as s ` +
+        `join usuario_sucripcion us on s.id = us.suscripcion where us.usuario = `+ escape(idUsuario) + `;`;
+    const [suscripciones] = await pool.query(query);
+    return suscripciones;
+}
 
 
-export {getEventosInd, getEventosSuscripcion, getSuscripciones};
+
+export {getEventosInd, getEventosSuscripcion, getSuscripcionesPropias, getUsuarioData, getSucripciones};

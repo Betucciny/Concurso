@@ -1,11 +1,10 @@
-import {Button, Spacer, Text, useTheme, Container} from "@nextui-org/react";
+import {Button, Spacer, Text, Container} from "@nextui-org/react";
 import {Suscripcion, SuscripcionItems} from "@/components/suscripciones";
 import React, {useEffect, useState} from "react";
 import {ModalEventos} from "@/components/modal";
 
 
 export default function Suscripciones({user}) {
-    const {theme} = useTheme();
     const [suscripciones, setSuscripciones] = useState([])
     const [id, setId] = useState(null)
     const [id_suscripcion, setIdSuscripcion] = useState(null)
@@ -13,20 +12,24 @@ export default function Suscripciones({user}) {
     const [visible1, setVisible1] = useState(false)
     const [eventos, setEventos] = useState([])
 
+    const tipo = !user ? null : user.tipo;
 
     const fetchData = async () => {
-        const res = await fetch('/api/suscripciones/3')
+        if (user === null) return
+        const res = await fetch('/api/suscripciones/' + user.id)
         const json = await res.json()
         return json.suscripcion
     };
 
     const fetchEvents = async () => {
-        const suscripciones = await fetchData()
-        const eventos = suscripciones.flatMap(objeto => objeto.eventos)
+        const suscrip = await fetchData()
+        if (user === null) return
+        const eventos = suscrip.flatMap(objeto => objeto.eventos)
         setEventos(eventos)
     }
 
     const fetchSuscripciones = async () => {
+        if (user === null) return
         setSuscripciones(await fetchData())
     }
 
@@ -35,7 +38,7 @@ export default function Suscripciones({user}) {
             fetchSuscripciones()
             fetchEvents()
         },
-        []
+        [user]
     )
 
     useEffect(
@@ -57,7 +60,7 @@ export default function Suscripciones({user}) {
 
     return (
         <>
-            <Text h1 color={'primary'}>Clases</Text>
+            <Text h1 color={'primary'}>{(tipo==='profesor') ? 'Clases' : 'Clubs'}</Text>
             <Suscripcion>
                 {suscripciones.length === 0 && (
                     <Container>

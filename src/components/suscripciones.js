@@ -1,4 +1,4 @@
-import {Button, Card, Container, Spacer, Text} from "@nextui-org/react";
+import {Button, Card, Container, Text} from "@nextui-org/react";
 import {getYMD, getMinutesFromDuration} from "@/clientServices/formatEvents";
 
 
@@ -17,6 +17,13 @@ function SuscripcionItems({eventos, idSuscripcion, title, clickonEvent, clikOnAg
         <Container style={{marginTop: "1rem"}} data-id={idSuscripcion}>
             <Text h3>{title}</Text>
             <Container display={"flex"} wrap={'wrap'} style={{maxHeight: '20rem', overflowY: 'scroll', margin: '1rem'}}>
+                {(eventos.length === 0) &&
+                        <Container>
+                            <Text>No hay eventos</Text>
+                            <Text>Para agregar un evento, presione el boton de abajo</Text>
+                        </Container>
+                }
+
                 {eventos.map((evento, index) => (
                         <Card key={index} css={{mw: "340px", margin: "1rem", padding: '1rem'}}>
                             <Card.Header>

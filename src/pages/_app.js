@@ -11,6 +11,8 @@ const lightTheme = createTheme({
     type: "light",
     theme: {
         colors: {
+            text: '#000',
+            textLight: '#000',
             // primary: Perfecto
             primary: '#4a5ede',
             primaryShadow: '#3e4fc7',
@@ -42,6 +44,8 @@ const darkTheme = createTheme({
     type: "dark",
     theme: {
         colors: {
+            text: '#fff',
+            textLight: '#fff',
             // primary: Perfecto
             primary: '#BB4430',
             primaryShadow: '#a83a1d',
@@ -49,7 +53,7 @@ const darkTheme = createTheme({
             // secondary: podria cambiar
             secondary: '#73305D',
             // error: podria cambiar
-            error: '#FCC5D8',
+            error: '#ad104c',
             // success: podria cambiar
             success: '#3E87CC',
             // warning: podria cambiar
@@ -60,6 +64,7 @@ const darkTheme = createTheme({
             background: '#101519',
             // link: Perfecto
             link: '#378CE6',
+
         },
         font: {
             family: 'Roboto, sans-serif',
