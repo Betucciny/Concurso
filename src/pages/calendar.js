@@ -85,13 +85,13 @@ export default function Calendar({user}) {
         {
             events: eventsI,
             color: theme.colors.blue300.value,
-            textColor: theme.colors.textLight.value,
+            textColor: theme.colors.text.value,
             borderColor: theme.colors.red900.value,
         },
         {
             events: eventsR,
             color: theme.colors.green300.value,
-            textColor: theme.colors.textLight.value,
+            textColor: theme.colors.text    .value,
             borderColor: theme.colors.red900.value,
         },
         ...eventsSuscripciones]

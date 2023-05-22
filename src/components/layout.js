@@ -209,10 +209,10 @@ export default function MainLayout({children}) {
                     setUserSelected(userSelected === 1 ? 3 : 1)
                 }}
                 />
-                <Text size="$xs">Esta solo es una Demo, esta predispuesta a Cambios y las funcionalidades pueden cambiar</Text>
-
+                <Text size="$xs">Esta solo es una Demo, se encuentra predispuesta a Cambios</Text>
+                <Text size="$xs" style={{marginRight: '3rem'}}>Realizado por Roberto Ángel Herrera Rodríguez</Text>
             </Container>
-            <Text size="$xs" style={{marginRight: '3rem'}}>Realizado por Roberto Ángel Herrera Rodríguez</Text>
+
         </>
     )
 }
